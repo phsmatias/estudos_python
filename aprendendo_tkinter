@@ -1,3 +1,5 @@
+#programa que calcula o imposto de renda com base no ano de 2023
+
 import tkinter
 from tkinter import *
 from tkinter import ttk
