@@ -1,0 +1,61 @@
+import tkinter
+from tkinter import *
+from tkinter import ttk
+
+janela = Tk()
+janela.title("Tabela do Imposto de Renda - 2023")
+
+tree = ttk.Treeview(janela, selectmode="browse", columns=("column1", "column2", "column3", "column4"), show='headings')
+
+tree.column("column1", width=200, minwidth=50, stretch=NO)
+tree.heading("#1", text="Base de cálculo")
+
+tree.column("column2", width=200, minwidth=50, stretch=NO)
+tree.heading("#2", text="Alíquota")
+
+tree.column("column2", width=200, minwidth=50, stretch=NO)
+tree.heading("#3", text='Parcela a deduzir')
+
+elementos1 = ['Até R$1.903,98*', 'Isento', 'Isento']
+elementos2 = ['De R$1.903,99 até R$2.826,65', '7,5%', 'R$142,80']
+elementos3 = ['De R$2.826,66 até R$3.751,05', '15%', 'R$354,80']
+elementos4 = ['De R$3.751,06 até R$4.664,68', '22,5%', 'R$636,13']
+elementos5 = ['Acima de R$4.664,68', '27,5%', 'R$869,38']
+elementos = [elementos1, elementos2, elementos3, elementos4, elementos5]
+
+for i in range(5):
+    tree.insert("", END, values=elementos[i], tags='i')
+
+tree.grid(row=0, column=0)
+
+janela.geometry("300x300")
+
+label = Label(janela, text='Sálario')
+label.grid(row=1, column=0)
+entrada = Entry(janela, width=40)
+entrada.grid(row=2, column=0)
+
+
+def test():
+    s = entrada.get()
+    if float(s) <= 1903.98:
+        label = Label(janela, text='ISENTO')
+        label.grid(row=6, column=0)
+    elif 1903.99 <= float(s) <= 2826.65:
+        label = Label(janela, text=f"Aliquota de 7,5%, parcela a deduzir de R$142,80. Contribuinte deve pagar R${float(s) * 0.075 - 142.80}")
+        label.grid(row=6, column=0)
+    elif 2826.66 <= float(s) <= 3751.05:
+        label = Label(janela, text=f"Aliquota de 15%, parcela a deduzir de R$354,80. Contribuinte deve pagar R${float(s) * 0.15 - 354.80}")
+        label.grid(row=6, column=0)
+    elif 3751.06 <= float(s) <= 4664.68:
+        label = Label(janela, text=f"Aliquota de 22,5%, parcela a deduzir de R$636.13. Contribuinte deve pagar R${float(s) * 0.225 - 636.13}")
+        label.grid(row=6, column=0)
+    else:
+        label = Label(janela,text=f"Aliquota de 27,5%, parcela a deduzir de R$869.36. Contribuinte deve pagar R${float(s) * 0.275 - 869.36}")
+        label.grid(row=6, column=0)
+
+
+b = Button(janela, text='enviar', bg='green', command=test)
+b.grid(row=4, column=0)
+
+janela.mainloop()
