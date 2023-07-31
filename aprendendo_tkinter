@@ -75,6 +75,3 @@ b = Button(janela, text='enviar', bg='green', command=test)
 b.grid(row=4, column=0)
 
 janela.mainloop()
-
-
-janela.mainloop()
