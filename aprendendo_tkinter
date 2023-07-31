@@ -1,5 +1,3 @@
-#programa que calcula o imposto de renda com base no ano de 2023
-
 import tkinter
 from tkinter import *
 from tkinter import ttk
@@ -7,15 +5,25 @@ from tkinter import ttk
 janela = Tk()
 janela.title("Tabela do Imposto de Renda - 2023")
 
-tree = ttk.Treeview(janela, selectmode="browse", columns=("column1", "column2", "column3", "column4"), show='headings')
+def on_window_resize(event):
+    # Atualizar o tamanho do Treeview quando a janela for redimensionada
+    tree.grid_configure(sticky="nsew")
+    tree.update()
 
-tree.column("column1", width=200, minwidth=50, stretch=NO)
+estilo = ttk.Style()
+estilo.configure("Treeview", font=("Arial", 12), rowheight=50, borderwidth=0)
+estilo.configure("Treeview.Cell", borderwidth=30, relief="solid")
+estilo.configure("Treeview.Heading", font=('Arial', 14, 'bold'))
+
+tree = ttk.Treeview(janela, selectmode="browse", columns=("column1", "column2", "column3"), show='headings')
+
+tree.column("column1", width=400, minwidth=100, stretch=NO, anchor="center")
 tree.heading("#1", text="Base de cálculo")
 
-tree.column("column2", width=200, minwidth=50, stretch=NO)
+tree.column("column2", width=400, minwidth=100, stretch=NO, anchor="center")
 tree.heading("#2", text="Alíquota")
 
-tree.column("column2", width=200, minwidth=50, stretch=NO)
+tree.column("column3", width=400, minwidth=100, stretch=NO, anchor="center")
 tree.heading("#3", text='Parcela a deduzir')
 
 elementos1 = ['Até R$1.903,98*', 'Isento', 'Isento']
@@ -30,6 +38,8 @@ for i in range(5):
 
 tree.grid(row=0, column=0)
 
+tree["show"] = "headings"
+
 janela.geometry("300x300")
 
 label = Label(janela, text='Sálario')
@@ -37,27 +47,34 @@ label.grid(row=1, column=0)
 entrada = Entry(janela, width=40)
 entrada.grid(row=2, column=0)
 
+tree.grid(row=0, column=0, sticky="nsew")
 
+janela.grid_rowconfigure(0, weight=1)
+janela.grid_columnconfigure(0, weight=1)
+janela.bind("<Configure>", on_window_resize)
 def test():
     s = entrada.get()
     if float(s) <= 1903.98:
         label = Label(janela, text='ISENTO')
-        label.grid(row=6, column=0)
+        label.grid(row=3, column=0)
     elif 1903.99 <= float(s) <= 2826.65:
         label = Label(janela, text=f"Aliquota de 7,5%, parcela a deduzir de R$142,80. Contribuinte deve pagar R${float(s) * 0.075 - 142.80}")
-        label.grid(row=6, column=0)
+        label.grid(row=3, column=0)
     elif 2826.66 <= float(s) <= 3751.05:
         label = Label(janela, text=f"Aliquota de 15%, parcela a deduzir de R$354,80. Contribuinte deve pagar R${float(s) * 0.15 - 354.80}")
-        label.grid(row=6, column=0)
+        label.grid(row=3, column=0)
     elif 3751.06 <= float(s) <= 4664.68:
         label = Label(janela, text=f"Aliquota de 22,5%, parcela a deduzir de R$636.13. Contribuinte deve pagar R${float(s) * 0.225 - 636.13}")
-        label.grid(row=6, column=0)
+        label.grid(row=3, column=0)
     else:
         label = Label(janela,text=f"Aliquota de 27,5%, parcela a deduzir de R$869.36. Contribuinte deve pagar R${float(s) * 0.275 - 869.36}")
-        label.grid(row=6, column=0)
+        label.grid(row=3, column=0)
 
 
 b = Button(janela, text='enviar', bg='green', command=test)
 b.grid(row=4, column=0)
+
+janela.mainloop()
+
 
 janela.mainloop()
